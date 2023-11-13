@@ -20,7 +20,7 @@ EntryPoint:
 
     ; load tile data
     ld de, Tiles
-    ld hl, $9000 ; tile data start for signed addressing
+    ld hl, $9000 ; tile data start for signed addressing, start late to leave first tile empty
     ld bc, TilesEnd - Tiles
 .copyTiles:
     ld a, [de]
@@ -30,6 +30,25 @@ EntryPoint:
     ld a, b
     or a, c
     jp nz, .copyTiles
+
+    ; empty tilemap
+    ld hl, $9800
+    ld bc, $400
+.emptyTilemap
+    ld a, 0
+    ld [hli], a
+    dec bc
+    ld a, b
+    or a, c
+    jp nz, .emptyTilemap
+
+    ; enable display
+    ld a, $81
+    ld [$ff40], a
+
+    ; load palette
+    ld a, %01101100
+    ld [$ff47], a
 
     jp @
 
