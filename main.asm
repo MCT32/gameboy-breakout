@@ -55,13 +55,25 @@ EntryPoint:
     or a, c
     jp nz, .fillTiles
 
+    ; clear oam
+    ld hl, $fe00
+    ld bc, $100
+.clearOAM
+    ld a, 0
+    ld [hli], a
+    dec bc
+    ld a, b
+    or a, c
+    jp nz, .clearOAM
+
     ; enable display
-    ld a, $91
+    ld a, $93
     ld [$ff40], a
 
     ; load palette
     ld a, %01101100
-    ld [$ff47], a
+    ld [$ff47], a ; bgp
+    ld [$ff48], a ; obp
 
     jp @
 
