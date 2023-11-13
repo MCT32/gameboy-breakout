@@ -42,6 +42,19 @@ EntryPoint:
     or a, c
     jp nz, .emptyTilemap
 
+    ; fill blocks
+    ld hl, $9840
+    ld bc, $80
+.fillTiles
+    ld a, c
+    and a, 1
+    add a, 1
+    ld [hli], a
+    dec bc
+    ld a, b
+    or a, c
+    jp nz, .fillTiles
+
     ; enable display
     ld a, $81
     ld [$ff40], a
