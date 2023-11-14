@@ -31,29 +31,18 @@ EntryPoint:
     or a, c
     jp nz, .copyTiles
 
-    ; empty tilemap
-    ld hl, $9800
-    ld bc, $400
-.emptyTilemap
-    ld a, 0
+    ; load tilemap
+    ld de, Tilemap
+    ld hl, $9800 ; tilemap start
+    ld bc, TilemapEnd - Tilemap
+.copyTilemap:
+    ld a, [de]
     ld [hli], a
+    inc de
     dec bc
     ld a, b
     or a, c
-    jp nz, .emptyTilemap
-
-    ; fill blocks
-    ld hl, $9840
-    ld bc, $80
-.fillTiles
-    ld a, c
-    and a, 1
-    add a, 1
-    ld [hli], a
-    dec bc
-    ld a, b
-    or a, c
-    jp nz, .fillTiles
+    jp nz, .copyTilemap
 
     ; clear oam
     ld hl, $fe00
@@ -82,3 +71,9 @@ SECTION "Tile data", ROM0
 Tiles:
 INCBIN "tiles.bin"
 TilesEnd:
+
+SECTION "Tilemap", ROM0
+
+Tilemap:
+INCBIN "tilemap.bin"
+TilemapEnd:
